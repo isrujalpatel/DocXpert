@@ -1,0 +1,91 @@
+/* ============================================================
+   testimonials.css — Testimonials section
+   ============================================================ */
+
+.testi-section {
+  padding: 4vh 5vw 8vh;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.testi-section .eyebrow {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 1rem;
+  text-align: center;
+}
+
+.testi-section h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  text-align: center;
+  max-width: 22ch;
+  margin: 0 auto 2.8rem;
+}
+
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.4rem;
+}
+
+.testi-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.testi-stars {
+  color: #D4AA3B;
+  font-size: .9rem;
+  letter-spacing: .05em;
+}
+
+.testi-quote {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.testi-author {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  margin-top: auto;
+}
+
+.testi-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.testi-avatar.a1 { background: var(--indigo); }
+.testi-avatar.a2 { background: var(--rust); }
+.testi-avatar.a3 { background: #4A8C6A; }
+
+.testi-name {
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+.testi-role {
+  font-size: .78rem;
+  color: var(--muted);
+}

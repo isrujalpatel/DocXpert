@@ -1,0 +1,72 @@
+/* ============================================================
+   nav.css — Navigation bar styles
+   ============================================================ */
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 5vw;
+  background: rgba(245, 242, 234, .72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(216, 211, 196, .5);
+}
+
+.nav-brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.nav-brand span {
+  color: var(--indigo);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: .88rem;
+  font-weight: 500;
+  transition: color .2s;
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+}
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #17161C;
+  color: #ffffff !important;
+  padding: 0.48rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(23, 22, 28, 0.22);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
+}
+
+.nav-cta:hover {
+  background: #2a2933 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(23, 22, 28, 0.32);
+}

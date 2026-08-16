@@ -1,0 +1,201 @@
+/* ============================================================
+   features.css — Features grid section (KPI/feature cards)
+   ============================================================ */
+
+.features-section {
+  position: relative;
+  z-index: 5;
+  padding: 8rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.features-header h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(1.85rem, 3.8vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.features-header p {
+  margin-top: 0.75rem;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 48ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 4+3 centered flexbox grid */
+.features-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.feature-card {
+  position: relative;
+  flex: 0 0 calc(25% - 0.9375rem);
+  box-sizing: border-box;
+  background: rgba(245, 242, 234, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(216, 211, 196, 0.5);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px -16px rgba(23, 22, 28, 0.18);
+  border-color: rgba(59, 76, 202, 0.3);
+}
+
+/* Card header row (icon + three-dots) */
+.feature-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Three-dots expand button */
+.card-dots-btn {
+  background: rgba(23, 22, 28, 0.04);
+  border: 1px solid rgba(216, 211, 196, 0.6);
+  color: var(--muted);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.card-dots-btn:hover,
+.feature-card.expanded .card-dots-btn {
+  background: rgba(59, 76, 202, 0.1);
+  color: var(--indigo);
+  border-color: rgba(59, 76, 202, 0.3);
+}
+
+.card-dots-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.feature-card.expanded .card-dots-btn svg {
+  transform: rotate(90deg);
+}
+
+/* Feature icon */
+.feature-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-card-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.feature-card-icon.indigo {
+  background: rgba(59, 76, 202, 0.12);
+  color: var(--indigo);
+}
+
+.feature-card-icon.rust {
+  background: rgba(216, 72, 30, 0.12);
+  color: var(--rust);
+}
+
+.feature-card-icon.gold {
+  background: rgba(180, 140, 40, 0.12);
+  color: #B48C28;
+}
+
+.feature-card-icon.teal {
+  background: rgba(20, 150, 130, 0.12);
+  color: #0E8A76;
+}
+
+/* Card body text */
+.feature-card-body {
+  margin-top: 1.5rem;
+}
+
+.feature-card-body h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.12rem;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+}
+
+.feature-card-body p {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Expanded state */
+.feature-card.expanded {
+  border-color: rgba(59, 76, 202, 0.4);
+  box-shadow: 0 25px 60px -15px rgba(59, 76, 202, 0.22);
+}
+
+.feature-card.expanded .feature-card-body p {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.expanded-details {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, margin-top 0.3s ease;
+  margin-top: 0;
+}
+
+.feature-card.expanded .expanded-details {
+  max-height: 250px;
+  opacity: 1;
+  margin-top: 0.85rem;
+}
+
+.expanded-details-content {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: rgba(59, 76, 202, 0.07);
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border-left: 3px solid var(--indigo);
+}

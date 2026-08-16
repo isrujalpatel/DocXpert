@@ -1,0 +1,267 @@
+/* ============================================================
+   widgets.css — Mini document preview widgets, dropzone,
+                 chips, pills, font-compare, search-bar, etc.
+   ============================================================ */
+
+/* ---- Mini document preview ---- */
+.mini-doc {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 18px;
+  box-shadow: 0 12px 30px -14px rgba(23, 22, 28, .2);
+}
+
+.mini-doc .mtitle {
+  height: 9px;
+  width: 60%;
+  background: var(--ink);
+  opacity: .8;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+.mini-doc .mline {
+  height: 5px;
+  background: var(--line);
+  border-radius: 2px;
+  margin-bottom: 6px;
+}
+
+.mini-doc .mline.short { width: 50%; }
+.mini-doc .mline.med   { width: 85%; }
+.mini-doc .mline.full  { width: 100%; }
+
+.mini-doc .mfix {
+  background: rgba(216, 72, 30, .16);
+  outline: 1px solid rgba(216, 72, 30, .4);
+  border-radius: 2px;
+}
+
+.mini-doc .mfix.blue {
+  background: rgba(59, 76, 202, .16);
+  outline: 1px solid rgba(59, 76, 202, .4);
+}
+
+/* ---- Drop zone ---- */
+.dropzone {
+  border: 2px dashed var(--indigo);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.4rem 1rem;
+  gap: .6rem;
+  color: var(--indigo);
+  background: rgba(59, 76, 202, .05);
+  transition: background .2s;
+}
+
+.dropzone:hover {
+  background: rgba(59, 76, 202, .1);
+}
+
+.dropzone svg { width: 36px; height: 36px; }
+
+.dropzone span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  color: var(--muted);
+}
+
+/* ---- Convert row / file chips ---- */
+.convert-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.file-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 12px 26px -14px rgba(23, 22, 28, .25);
+}
+
+.file-chip .ic {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-chip.doc .ic { background: var(--indigo); }
+.file-chip.pdf .ic { background: var(--rust); }
+
+.file-chip .ic svg { width: 18px; height: 18px; }
+
+.file-chip small {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+}
+
+.arrow-mid svg {
+  width: 22px;
+  height: 22px;
+  animation: pulseX 1.6s ease-in-out infinite;
+  color: var(--muted);
+}
+
+/* ---- Suggestion chip ---- */
+.suggest-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: #fff;
+  border-radius: 8px;
+  padding: .5rem .9rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  box-shadow: 0 10px 22px -12px rgba(23, 22, 28, .25);
+  margin-top: 14px;
+}
+
+.suggest-chip .old {
+  color: var(--rust);
+  text-decoration: line-through;
+}
+
+.suggest-chip .new {
+  color: var(--indigo);
+  font-weight: 600;
+}
+
+.accept-row {
+  display: flex;
+  gap: .5rem;
+  margin-top: 12px;
+}
+
+.pill {
+  font-family: 'Inter', sans-serif;
+  font-size: .68rem;
+  font-weight: 600;
+  padding: .35rem .85rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.pill.yes { background: var(--indigo); color: #fff; }
+
+.pill.no {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+/* ---- Font comparison ---- */
+.font-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.font-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 9px;
+  padding: .6rem .9rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  box-shadow: 0 8px 18px -12px rgba(23, 22, 28, .2);
+}
+
+.font-tag.bad {
+  color: var(--rust);
+  text-decoration: line-through;
+  opacity: .7;
+}
+
+.font-tag.good {
+  color: var(--indigo);
+  font-weight: 600;
+  border: 1px solid rgba(59, 76, 202, .3);
+}
+
+/* ---- Margin diff ---- */
+.margin-diff {
+  position: relative;
+  width: 170px;
+  height: 220px;
+  margin: 0 auto;
+}
+
+.margin-diff .page-a,
+.margin-diff .page-b {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 12px 26px -14px rgba(23, 22, 28, .25);
+}
+
+.margin-diff .page-a { border: 1.5px dashed var(--indigo); }
+
+.margin-diff .page-b {
+  inset: 14px -14px -14px 14px;
+  border: 1.5px dashed var(--rust);
+  opacity: .85;
+}
+
+/* ---- Search bar ---- */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: #fff;
+  border-radius: 999px;
+  padding: .55rem 1.1rem;
+  box-shadow: 0 10px 22px -14px rgba(23, 22, 28, .25);
+  margin-bottom: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  color: var(--muted);
+}
+
+.search-bar b  { color: var(--rust); }
+.search-bar .to { color: var(--indigo); }
+
+/* ---- Download button ---- */
+.download-btn {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 12px;
+  padding: .85rem 1.4rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: .85rem;
+  box-shadow: 0 16px 30px -14px rgba(23, 22, 28, .4);
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 36px -14px rgba(23, 22, 28, .5);
+}
+
+.download-btn svg { width: 16px; height: 16px; }
+
+.download-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,49 @@
+/* ============================================================
+   animations.css — All @keyframes & transition animations
+   ============================================================ */
+
+/* Background blob drift */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(12px, -18px) scale(1.04); }
+  66%       { transform: translate(-10px, 14px) scale(.97); }
+}
+
+/* Floating document pages in hero */
+@keyframes floatDoc {
+  0%, 100% { transform: rotate(-6deg) translateY(0); }
+  50%       { transform: rotate(-8deg) translateY(-12px); }
+}
+
+@keyframes floatPdf {
+  0%, 100% { transform: rotate(5deg) translateY(0); }
+  50%       { transform: rotate(7deg) translateY(-12px); }
+}
+
+/* Spinning gear/orb in hero */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Scroll hint bob */
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(7px); }
+}
+
+/* Arrow pulse in convert widget */
+@keyframes pulseX {
+  0%, 100% { transform: translateX(0); opacity: .6; }
+  50%       { transform: translateX(6px); opacity: 1; }
+}
+
+/* Reduced motion — disable all decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  .glass-page,
+  .swap-orb svg,
+  .scroll-hint,
+  .arrow-mid svg,
+  .blob {
+    animation: none;
+  }
+}

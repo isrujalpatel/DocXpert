@@ -1,853 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DocXpert — Smarter Documents, Instantly</title>
-<meta name="description" content="DocXpert transforms the way you work with Word and PDF files — fix, format, convert, and perfect every document in seconds.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --paper: #F5F2EA;
-    --ink: #17161C;
-    --indigo: #3B4CCA;
-    --indigo-soft: #6E7BE0;
-    --rust: #D8481E;
-    --rust-soft: #F0784E;
-    --line: #D8D3C4;
-    --muted: #7A7666;
-    --glass-bg: rgba(255,255,255,.52);
-    --glass-border: rgba(255,255,255,.7);
-    --shadow-card: 0 40px 80px -30px rgba(23,22,28,.3);
-  }
-
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; overflow-x: hidden; }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.1rem 5vw;
-    background: rgba(245,242,234,.72);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(216,211,196,.5);
-  }
-  .nav-brand { font-family: 'Fraunces',serif; font-weight: 700; font-size: 1.3rem; letter-spacing: -.02em; color: var(--ink); text-decoration: none; }
-  .nav-brand span { color: var(--indigo); }
-  .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
-  .nav-links a { text-decoration: none; color: var(--muted); font-size: .88rem; font-weight: 500; transition: color .2s; }
-  .nav-links a:hover { color: var(--ink); }
-  .nav-cta {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    background: #17161C; color: #ffffff !important;
-    padding: 0.48rem 1.2rem; border-radius: 999px;
-    font-size: 0.85rem !important; font-weight: 600 !important;
-    text-decoration: none; box-shadow: 0 4px 14px rgba(23,22,28,0.22);
-    transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
-  }
-  .nav-cta:hover {
-    background: #2a2933 !important;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(23,22,28,0.32);
-  }
-
-  /* HERO */
-  .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8vh 2vw 4vh; overflow: hidden; }
-  .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5; z-index: 0; animation: drift 10s ease-in-out infinite; }
-  .blob.b1 { width: 500px; height: 500px; background: var(--indigo-soft); top: -160px; left: -140px; animation-delay: 0s; }
-  .blob.b2 { width: 420px; height: 420px; background: var(--rust-soft); bottom: -160px; right: -130px; animation-delay: -3.5s; }
-  .blob.b3 { width: 300px; height: 300px; background: #E8D9C0; top: 38%; left: 55%; opacity: .45; animation-delay: -6s; }
-  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(12px,-18px) scale(1.04); } 66% { transform: translate(-10px,14px) scale(.97); } }
-
-  /* Two-column hero */
-  .hero-inner {
-    position: relative; z-index: 2;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    width: 100%; max-width: 1280px; margin: 0 auto;
-  }
-  .hero-left {
-    flex: 1; display: flex; flex-direction: column; align-items: flex-start;
-  }
-  .hero-right {
-    width: 100%; max-width: 1240px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: center;
-    min-height: 340px; position: relative;
-  }
-
-  .eyebrow {
-    font-family: 'JetBrains Mono',monospace; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 1.4rem;
-    background: var(--glass-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    border: 1px solid var(--glass-border); padding: .4rem 1rem; border-radius: 999px;
-  }
-  .eyebrow::before { content: "◆ "; color: var(--indigo); }
-
-  h1 { font-family: 'Fraunces',serif; font-weight: 700; font-size: clamp(2.4rem,5.5vw,4.6rem); line-height: 1.04; text-align: left; max-width: 16ch; letter-spacing: -.02em; }
-  h1 em { font-style: italic; color: var(--indigo); }
-
-  .sub { margin-top: 1.4rem; max-width: 42ch; text-align: left; color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
-
-  .hero-actions { display: flex; align-items: center; gap: 1rem; margin-top: 2.4rem; }
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: .5rem;
-    background: var(--indigo); color: #fff; font-family: 'Inter',sans-serif; font-weight: 600; font-size: .92rem;
-    padding: .75rem 1.7rem; border-radius: 999px; text-decoration: none;
-    box-shadow: 0 18px 40px -12px rgba(59,76,202,.45); transition: transform .2s, box-shadow .2s, background .2s;
-  }
-  .btn-primary:hover { background: #2d3ba8; transform: translateY(-2px); box-shadow: 0 22px 50px -12px rgba(59,76,202,.55); }
-  .btn-ghost { display: inline-flex; align-items: center; gap: .45rem; color: var(--muted); font-size: .88rem; font-weight: 500; text-decoration: none; transition: color .2s; }
-  .btn-ghost:hover { color: var(--ink); }
-
-  /* Stage — fills the right column */
-  .stage { position: relative; width: 100%; height: 340px; display: flex; align-items: center; justify-content: center; }
-  .glass-page {
-    position: absolute; width: 180px; height: 240px;
-    background: var(--glass-bg); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-    border: 1px solid var(--glass-border); border-radius: 16px;
-    box-shadow: 0 30px 60px -20px rgba(23,22,28,.28); padding: 18px 16px;
-  }
-  .glass-page .head { display: flex; align-items: center; gap: 7px; margin-bottom: 14px; }
-  .tag { font-family: 'JetBrains Mono',monospace; font-size: .6rem; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; }
-  .glass-page.doc { left: calc(50% - 215px); transform: rotate(-6deg); animation: floatDoc 6s ease-in-out infinite; }
-  .glass-page.doc .tag { background: rgba(59,76,202,.18); color: var(--indigo); }
-  .glass-page.pdf { left: calc(50% + 35px); transform: rotate(5deg); animation: floatPdf 6s ease-in-out infinite; animation-delay: .4s; }
-  .glass-page.pdf .tag { background: rgba(216,72,30,.16); color: var(--rust); }
-  @keyframes floatDoc { 0%,100% { transform: rotate(-6deg) translateY(0); } 50% { transform: rotate(-8deg) translateY(-12px); } }
-  @keyframes floatPdf { 0%,100% { transform: rotate(5deg) translateY(0); } 50% { transform: rotate(7deg) translateY(-12px); } }
-
-  .title-line { height: 9px; width: 68%; background: var(--ink); border-radius: 2px; margin-bottom: 11px; opacity: .75; }
-  .gline { height: 5px; background: rgba(23,22,28,.14); border-radius: 2px; margin-bottom: 7px; }
-  .gline.short { width: 55%; }
-  .gline.med { width: 88%; }
-  .gline.full { width: 100%; }
-  .gfix { background: rgba(59,76,202,.22); outline: 1px solid rgba(59,76,202,.5); border-radius: 2px; }
-  .glass-page.pdf .gfix { background: rgba(216,72,30,.2); outline: 1px solid rgba(216,72,30,.45); }
-
-  .ai-badge { position: absolute; top: -14px; right: -14px; background: var(--indigo); color: #fff; font-family: 'JetBrains Mono',monospace; font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; padding: .28rem .65rem; border-radius: 999px; box-shadow: 0 8px 18px -8px rgba(59,76,202,.5); }
-
-  .swap-orb { position: relative; z-index: 3; width: 56px; height: 56px; border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 40px -14px rgba(23,22,28,.35); }
-  .swap-orb svg { width: 22px; height: 22px; animation: spin 3.4s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .beam { position: absolute; top: 50%; left: calc(50% - 215px + 180px); right: calc(50% - 35px); height: 1px; border-top: 1.5px dashed rgba(23,22,28,.18); z-index: 0; }
-
-  .scroll-hint { margin-top: 3rem; display: flex; flex-direction: column; align-items: center; align-self: center; gap: .4rem; color: var(--muted); font-family: 'JetBrains Mono',monospace; font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; animation: bob 2s ease-in-out infinite; text-align: center; }
-  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
-
-  /* MACBOOK SCREEN WORKSPACE INTERFACE */
-  .macbook-screen-app {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #17161C 0%, #1c1a26 50%, #2a2838 100%);
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 0;
-    box-sizing: border-box;
-    border-radius: 5px;
-  }
-  .mac-window-bar {
-    height: 24px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  .mac-dots { display: flex; gap: 6px; }
-  .mac-dots .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .mac-dots .dot.red { background: #ff5f56; }
-  .mac-dots .dot.yellow { background: #ffbd2e; }
-  .mac-dots .dot.green { background: #27c93f; }
-  .mac-screen-body {
-    padding: 1.8rem 2.4rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    height: calc(100% - 24px);
-    background: radial-gradient(circle at 85% 20%, rgba(59,76,202,0.35) 0%, transparent 60%);
-  }
-
-  .mac-h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-size: 1.55rem;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: #ffffff;
-    margin-bottom: 0.6rem;
-  }
-  .mac-h1 em { font-style: italic; color: #6E7BE0; font-family: inherit; }
-
-  .mac-sub {
-    font-size: 0.78rem;
-    line-height: 1.48;
-    color: rgba(245, 242, 234, 0.85);
-    max-width: 420px;
-    margin-bottom: 1.1rem;
-  }
-
-  .mac-actions { display: flex; align-items: center; gap: 0.65rem; }
-  .mac-btn-primary {
-    display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;
-    background: #3B4CCA; color: #fff; font-size: 0.62rem; font-weight: 500;
-    line-height: 1; white-space: nowrap;
-    padding: 0.32rem 0.75rem; border-radius: 999px; text-decoration: none;
-    box-shadow: 0 3px 10px rgba(59,76,202,0.4); transition: transform 0.2s;
-  }
-  .mac-btn-primary svg {
-    width: 10px !important;
-    height: 10px !important;
-    min-width: 10px !important;
-    min-height: 10px !important;
-    flex-shrink: 0;
-    display: block;
-  }
-  .mac-btn-primary:hover { transform: translateY(-1px); }
-  .mac-btn-ghost {
-    display: inline-flex; align-items: center; gap: 0.25rem;
-    color: rgba(255,255,255,0.85); font-size: 0.62rem; font-weight: 500;
-    line-height: 1; white-space: nowrap; text-decoration: none;
-  }
-
-  /* STICKY MACBOOK DISPLAY & TRANSPARENCY SCROLL EFFECT */
-  .hero-right {
-    width: 100%;
-    max-width: 1178px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-  .macbook-sticky-container {
-    position: sticky;
-    top: 65px;
-    z-index: 1;
-    width: 100%;
-    max-width: 1178px;
-    margin: 0 auto;
-    filter: drop-shadow(0 30px 60px rgba(23,22,28,0.35));
-    transition: transform 0.4s ease;
-  }
-  .macbook-sticky-container svg {
-    width: 100%;
-    height: auto;
-  }
-
-  /* EXPANDING KPI CARDS WITH SCROLL TRANSPARENCY */
-  .kpi-section {
-    position: relative;
-    z-index: 5;
-    padding: 6vh 5vw 8vh;
-    max-width: 1200px;
-    margin: -60px auto 0;
-  }
-  .kpi-header { text-align: center; margin-bottom: 2.5rem; }
-  .kpi-header .eyebrow { margin: 0 auto 0.8rem; width: fit-content; }
-  .kpi-header h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
-
-  .kpi-container {
-    display: grid;
-    grid-template-columns: 4fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
-    gap: 0.75rem;
-    height: 520px;
-    width: 100%;
-    transition: grid-template-columns 0.5s cubic-bezier(0.16, 1, 0.3, 1), grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .kpi-card {
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    background: rgba(23, 22, 28, 0.65);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 20px 40px -15px rgba(23,22,28,0.38);
-    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-  }
-  .kpi-card:hover {
-    background: rgba(23, 22, 28, 0.82);
-    border-color: rgba(255,255,255,0.65);
-    box-shadow: 0 25px 50px -12px rgba(23,22,28,0.5);
-  }
-
-  .kpi-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%) brightness(0.35);
-    transform: scale(1.1);
-    transition: filter 0.5s ease, transform 0.5s ease;
-  }
-  .kpi-card.active .kpi-bg {
-    filter: grayscale(0%) brightness(0.6);
-    transform: scale(1);
-  }
-
-  .kpi-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(23,22,28,0.92) 0%, rgba(23,22,28,0.45) 50%, rgba(23,22,28,0.25) 100%);
-  }
-
-  .kpi-content {
-    position: absolute;
-    inset: 0;
-    padding: 1.8rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 2;
-    color: #fff;
-  }
-
-  .kpi-vertical-label {
-    position: absolute;
-    top: 2rem;
-    left: 1.8rem;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.75);
-    transition: opacity 0.3s ease;
-    white-space: nowrap;
-  }
-  .kpi-card.active .kpi-vertical-label {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .kpi-icon-badge {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    margin-bottom: 0.8rem;
-  }
-
-  .kpi-expanded-info {
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
-    pointer-events: none;
-  }
-  .kpi-card.active .kpi-expanded-info {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .kpi-badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background: rgba(59,76,202,0.6);
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 0.25rem 0.65rem;
-    border-radius: 999px;
-    display: inline-block;
-    margin-bottom: 0.6rem;
-  }
-
-  .kpi-big-num {
-    font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-size: clamp(2.4rem, 4vw, 3.6rem);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: #fff;
-    margin-bottom: 0.4rem;
-  }
-
-  .kpi-topic {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 1.15rem;
-    color: rgba(255,255,255,0.95);
-    margin-bottom: 0.5rem;
-  }
-
-  .kpi-desc {
-    font-size: 0.88rem;
-    line-height: 1.55;
-    color: rgba(255,255,255,0.78);
-    max-width: 320px;
-  }
-
-  @media (max-width: 768px) {
-    .kpi-container {
-      grid-template-columns: 1fr !important;
-      grid-template-rows: 4fr 1fr 1fr 1fr 1fr;
-      height: 650px;
-    }
-    .kpi-vertical-label {
-      writing-mode: horizontal-tb;
-      transform: none;
-      top: 1.5rem;
-      left: 1.5rem;
-    }
-  }
-
-  /* HOW IT WORKS */
-  .hiw-intro { text-align: center; padding: 8vh 6vw 3vh; }
-  .hiw-intro .eyebrow { margin: 0 auto 1rem; width: fit-content; }
-  .hiw-intro h2 { font-family: 'Fraunces',serif; font-weight: 600; font-size: clamp(1.9rem,4vw,2.8rem); max-width: 22ch; margin: 0 auto .8rem; }
-  .hiw-intro p { color: var(--muted); font-size: .97rem; max-width: 42ch; margin: 0 auto; line-height: 1.6; }
-
-  /* STACK */
-  .stack { position: relative; padding: 2vh 5vw 14vh; max-width: 980px; margin: 0 auto; }
-  .panel { height: 100vh; display: flex; align-items: flex-start; justify-content: center; }
-  .card { position: sticky; width: 100%; max-width: 900px; background: var(--glass-bg); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: var(--shadow-card); padding: 2.8rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem; align-items: center; min-height: 400px; }
-  .card-left .step-num { font-family: 'JetBrains Mono',monospace; font-size: .7rem; color: var(--indigo); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .9rem; display: block; }
-  .card-left h3 { font-family: 'Fraunces',serif; font-weight: 600; font-size: 1.75rem; margin-bottom: .8rem; line-height: 1.15; }
-  .card-left p { color: var(--muted); font-size: .95rem; line-height: 1.65; }
-  .card-right { position: relative; background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.65); border-radius: 16px; min-height: 260px; padding: 22px; display: flex; flex-direction: column; justify-content: center; }
-
-  /* mini widgets */
-  .mini-doc { background: #fff; border-radius: 10px; padding: 16px 18px; box-shadow: 0 12px 30px -14px rgba(23,22,28,.2); }
-  .mini-doc .mtitle { height: 9px; width: 60%; background: var(--ink); opacity: .8; border-radius: 2px; margin-bottom: 10px; }
-  .mini-doc .mline { height: 5px; background: var(--line); border-radius: 2px; margin-bottom: 6px; }
-  .mini-doc .mline.short { width: 50%; }
-  .mini-doc .mline.med { width: 85%; }
-  .mini-doc .mline.full { width: 100%; }
-  .mini-doc .mfix { background: rgba(216,72,30,.16); outline: 1px solid rgba(216,72,30,.4); border-radius: 2px; }
-  .mini-doc .mfix.blue { background: rgba(59,76,202,.16); outline: 1px solid rgba(59,76,202,.4); }
-
-  .dropzone { border: 2px dashed var(--indigo); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.4rem 1rem; gap: .6rem; color: var(--indigo); background: rgba(59,76,202,.05); transition: background .2s; }
-  .dropzone:hover { background: rgba(59,76,202,.1); }
-  .dropzone svg { width: 36px; height: 36px; }
-  .dropzone span { font-family: 'JetBrains Mono',monospace; font-size: .7rem; color: var(--muted); }
-
-  .convert-row { display: flex; align-items: center; justify-content: center; gap: 1.2rem; }
-  .file-chip { display: flex; flex-direction: column; align-items: center; gap: .5rem; background: #fff; border-radius: 12px; padding: 1rem 1.2rem; box-shadow: 0 12px 26px -14px rgba(23,22,28,.25); }
-  .file-chip .ic { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-  .file-chip.doc .ic { background: var(--indigo); }
-  .file-chip.pdf .ic { background: var(--rust); }
-  .file-chip .ic svg { width: 18px; height: 18px; }
-  .file-chip small { font-family: 'JetBrains Mono',monospace; font-size: .62rem; color: var(--muted); }
-  .arrow-mid svg { width: 22px; height: 22px; animation: pulseX 1.6s ease-in-out infinite; color: var(--muted); }
-  @keyframes pulseX { 0%,100% { transform: translateX(0); opacity: .6; } 50% { transform: translateX(6px); opacity: 1; } }
-
-  .suggest-chip { display: inline-flex; align-items: center; gap: .5rem; background: #fff; border-radius: 8px; padding: .5rem .9rem; font-family: 'JetBrains Mono',monospace; font-size: .7rem; box-shadow: 0 10px 22px -12px rgba(23,22,28,.25); margin-top: 14px; }
-  .suggest-chip .old { color: var(--rust); text-decoration: line-through; }
-  .suggest-chip .new { color: var(--indigo); font-weight: 600; }
-  .accept-row { display: flex; gap: .5rem; margin-top: 12px; }
-  .pill { font-family: 'Inter',sans-serif; font-size: .68rem; font-weight: 600; padding: .35rem .85rem; border-radius: 999px; cursor: pointer; }
-  .pill.yes { background: var(--indigo); color: #fff; }
-  .pill.no { background: transparent; border: 1px solid var(--line); color: var(--muted); }
-
-  .font-compare { display: flex; flex-direction: column; gap: 10px; }
-  .font-tag { display: flex; align-items: center; justify-content: space-between; background: #fff; border-radius: 9px; padding: .6rem .9rem; font-family: 'JetBrains Mono',monospace; font-size: .68rem; box-shadow: 0 8px 18px -12px rgba(23,22,28,.2); }
-  .font-tag.bad { color: var(--rust); text-decoration: line-through; opacity: .7; }
-  .font-tag.good { color: var(--indigo); font-weight: 600; border: 1px solid rgba(59,76,202,.3); }
-
-  .margin-diff { position: relative; width: 170px; height: 220px; margin: 0 auto; }
-  .margin-diff .page-a, .margin-diff .page-b { position: absolute; inset: 0; background: #fff; border-radius: 8px; box-shadow: 0 12px 26px -14px rgba(23,22,28,.25); }
-  .margin-diff .page-a { border: 1.5px dashed var(--indigo); }
-  .margin-diff .page-b { inset: 14px -14px -14px 14px; border: 1.5px dashed var(--rust); opacity: .85; }
-
-  .search-bar { display: flex; align-items: center; gap: .5rem; background: #fff; border-radius: 999px; padding: .55rem 1.1rem; box-shadow: 0 10px 22px -14px rgba(23,22,28,.25); margin-bottom: 14px; font-family: 'JetBrains Mono',monospace; font-size: .7rem; color: var(--muted); }
-  .search-bar b { color: var(--rust); }
-  .search-bar .to { color: var(--indigo); }
-
-  .download-btn { display: flex; align-items: center; gap: .6rem; background: var(--ink); color: #fff; border-radius: 12px; padding: .85rem 1.4rem; font-family: 'Inter',sans-serif; font-weight: 600; font-size: .85rem; box-shadow: 0 16px 30px -14px rgba(23,22,28,.4); transition: transform .2s, box-shadow .2s; cursor: pointer; }
-  .download-btn:hover { transform: translateY(-2px); box-shadow: 0 20px 36px -14px rgba(23,22,28,.5); }
-  .download-btn svg { width: 16px; height: 16px; }
-  .download-row { display: flex; align-items: center; justify-content: center; }
-
-  /* FEATURES GRID */
-  .features-section { padding: 6vh 5vw 8vh; max-width: 1100px; margin: 0 auto; }
-  .features-section .eyebrow { display: block; width: fit-content; margin: 0 auto 1rem; text-align: center; }
-  .features-section h2 { font-family: 'Fraunces',serif; font-weight: 600; font-size: clamp(1.8rem,3.5vw,2.6rem); text-align: center; max-width: 22ch; margin: 0 auto 3rem; }
-  .features-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1.4rem; }
-  .feat-card { background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 18px; padding: 1.8rem; transition: transform .2s, box-shadow .2s; }
-  .feat-card:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -18px rgba(23,22,28,.22); }
-  .feat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; }
-  .feat-icon svg { width: 22px; height: 22px; }
-  .feat-icon.indigo { background: rgba(59,76,202,.15); color: var(--indigo); }
-  .feat-icon.rust { background: rgba(216,72,30,.14); color: var(--rust); }
-  .feat-icon.gold { background: rgba(180,140,40,.15); color: #B48C28; }
-  .feat-card h4 { font-family: 'Fraunces',serif; font-weight: 600; font-size: 1.1rem; margin-bottom: .5rem; }
-  .feat-card p { color: var(--muted); font-size: .88rem; line-height: 1.6; }
-
-  /* TESTIMONIALS */
-  .testi-section { padding: 4vh 5vw 8vh; max-width: 1100px; margin: 0 auto; }
-  .testi-section .eyebrow { display: block; width: fit-content; margin: 0 auto 1rem; text-align: center; }
-  .testi-section h2 { font-family: 'Fraunces',serif; font-weight: 600; font-size: clamp(1.8rem,3.5vw,2.4rem); text-align: center; max-width: 22ch; margin: 0 auto 2.8rem; }
-  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.4rem; }
-  .testi-card { background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; gap: 1rem; }
-  .testi-stars { color: #D4AA3B; font-size: .9rem; letter-spacing: .05em; }
-  .testi-quote { font-family: 'Fraunces',serif; font-size: 1rem; line-height: 1.55; color: var(--ink); font-style: italic; }
-  .testi-author { display: flex; align-items: center; gap: .7rem; margin-top: auto; }
-  .testi-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono',monospace; font-size: .75rem; font-weight: 600; color: #fff; }
-  .testi-avatar.a1 { background: var(--indigo); }
-  .testi-avatar.a2 { background: var(--rust); }
-  .testi-avatar.a3 { background: #4A8C6A; }
-  .testi-name { font-size: .85rem; font-weight: 600; }
-  .testi-role { font-size: .78rem; color: var(--muted); }
-
-  /* CLOSING */
-  .closing { text-align: center; padding: 4vh 6vw 12vh; }
-  .closing h2 { font-family: 'Fraunces',serif; font-weight: 700; font-size: clamp(2rem,5vw,3rem); max-width: 20ch; margin: 0 auto 1rem; line-height: 1.1; }
-  .closing h2 em { font-style: italic; color: var(--indigo); }
-  .closing p { color: var(--muted); max-width: 40ch; margin: 0 auto 2rem; font-size: 1rem; line-height: 1.6; }
-  .closing-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-
-  /* FOOTER */
-  footer { border-top: 1px solid var(--line); padding: 2rem 5vw; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-  .footer-brand { font-family: 'Fraunces',serif; font-weight: 700; font-size: 1.1rem; letter-spacing: -.02em; color: var(--ink); }
-  .footer-brand span { color: var(--indigo); }
-  footer p { font-size: .8rem; color: var(--muted); }
-
-  /* RESPONSIVE */
-  @media (max-width: 760px) {
-    .card { grid-template-columns: 1fr; padding: 1.8rem; gap: 1.6rem; }
-    .card-right { min-height: 200px; }
-    .panel { height: auto; padding: 2rem 0; }
-    .card { position: relative !important; top: 0 !important; }
-    .stack { padding-top: 0; }
-    .stat-item { border-right: none; border-bottom: 1px solid var(--line); }
-    .stat-item:last-child { border-bottom: none; }
-    nav .nav-links { display: none; }
-    /* Hero stacks on mobile */
-    .hero-inner { flex-direction: column; gap: 2.5rem; }
-    .hero-left { align-items: center; }
-    h1 { text-align: center; }
-    .sub { text-align: center; }
-    .scroll-hint { align-items: center; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .glass-page, .swap-orb svg, .scroll-hint, .arrow-mid svg, .blob { animation: none; }
-  }
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DocXpert — Smarter Documents, Instantly</title>
+  <meta name="description"
+    content="DocXpert transforms the way you work with Word and PDF files — fix, format, convert, and perfect every document in seconds.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/widgets.css">
+  <!-- Component CSS -->
+  <link rel="stylesheet" href="css/components/nav.css">
+  <link rel="stylesheet" href="css/components/hero.css">
+  <link rel="stylesheet" href="css/components/kpi.css">
+  <link rel="stylesheet" href="css/components/features.css">
+  <link rel="stylesheet" href="css/components/testimonials.css">
+  <link rel="stylesheet" href="css/components/closing.css">
+  <link rel="stylesheet" href="css/components/footer.css">
+  <!-- Responsive -->
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
+
+
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-brand">Doc<span>Xpert</span></a>
-  <a href="#how" class="nav-cta" id="nav-upload-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
-    Upload
-  </a>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
-  <div class="hero-inner">
-
-    <!-- CENTER HERO: Macbook Pro Display with embedded workspace app interface -->
-    <div class="hero-right" style="width: 100%; max-width: 1178px;">
-      <div class="macbook-sticky-container">
-        <svg width="650" height="400" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Lid Frame -->
-          <path fill="#a4a5a7" d="M79.56,13.18h491.32c7.23,0,13.1,5.87,13.1,13.1v336.61H66.46V26.28c0-7.23,5.87-13.1,13.1-13.1Z"/>
-          <path fill="#222" d="M79.96,14.24h490.45c6.83,0,12.37,5.54,12.37,12.37v336.28H67.59V26.6c0-6.83,5.54-12.37,12.37-12.37Z"/>
-          <path fill="#000" d="M570.25,15.74H80.34c-6.12,0-11.08,4.96-11.08,11.08v336.07h512.08V26.82c0-6.12-4.96-11.08-11.08-11.08ZM575.74,345.17H74.52V27.31c0-3.31,2.68-5.99,5.99-5.99h489.24c3.31,0,5.99,2.68,5.99,5.99v317.86Z"/>
-          
-          <rect fill="#1d1d1d" x="74.52" y="21.32" width="501.22" rx="5" ry="5" height="323.85"/>
-          
-          <!-- MACBOOK SCREEN INTERFACE CONTAINER -->
-          <foreignObject x="74.52" y="21.32" width="501.22" height="323.85" clip-path="url(#roundedCorners)">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="macbook-screen-app">
-              <div class="mac-window-bar">
-                <div class="mac-dots">
-                  <span class="dot red"></span>
-                  <span class="dot yellow"></span>
-                  <span class="dot green"></span>
-                </div>
-              </div>
-              <div class="mac-screen-body">
-                <h1 class="mac-h1">Your documents,<br/><em>flawlessly polished</em><br/>in seconds.</h1>
-                <p class="mac-sub">Stop wrestling with messy Word files and broken PDFs. DocXpert reads, repairs, and perfects every document so you can focus on what actually matters.</p>
-                <div class="mac-actions">
-                  <a href="#how" class="mac-btn-primary" id="hero-cta">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="7" height="7"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
-                    Upload your first doc
-                  </a>
-                  <a href="#how" class="mac-btn-ghost" id="hero-how">
-                    See how it works &rarr;
-                  </a>
-                </div>
-              </div>
-            </div>
-          </foreignObject>
-
-          <!-- Macbook Base Hinge & Feet -->
-          <rect fill="#1d1d1d" x="69.09" y="350.51" width="512.11" height="12.48"/>
-          <path fill="#000" d="M298.14,21.02h54.07v6.5c0,1.56-1.27,2.82-2.82,2.82h-48.42c-1.56,0-2.82-1.27-2.82-2.82v-6.5h0Z"/>
-          <path fill="#acadaf" d="M19.04,362.77h611.92v10.39c0,5.95-4.83,10.79-10.79,10.79H29.83c-5.95,0-10.79-4.83-10.79-10.79v-10.39h0Z"/>
-          <path fill="#080d4c" d="M325.11,25.14c-1.99.03-1.99-3.09,0-3.06,1.99-.03,1.99,3.09,0,3.06Z"/>
-          <polygon fill="#b9b9bb" points="600.06 385.39 567.29 385.39 565.84 383.95 601.82 383.95 600.06 385.39"/>
-          <polygon fill="#292929" points="598.73 386.82 568.64 386.82 567.32 385.39 600.35 385.39 598.73 386.82"/>
-          <polygon fill="#b9b9bb" points="82.64 385.39 49.87 385.39 48.43 383.95 84.41 383.95 82.64 385.39"/>
-          <polygon fill="#292929" points="81.31 386.82 51.23 386.82 49.9 385.39 82.93 385.39 81.31 386.82"/>
-          <path fill="#8f9091" d="M278.11,362.6h94.05c0,3.63-2.95,6.58-6.58,6.58h-80.89c-3.63,0-6.58-2.95-6.58-6.58h0Z"/>
-          <defs>
-            <clipPath id="roundedCorners">
-              <rect fill="#ffffff" x="74.52" y="21.32" width="501.22" height="323.85" rx="5" ry="5"/>
-            </clipPath>
-          </defs>
-        </svg>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- HOW IT WORKS: EXPANDING 7-STEP WORKFLOW -->
-<section class="kpi-section" id="how">
-  <div class="kpi-header">
-    <span class="eyebrow">◆ Step-By-Step Workflow</span>
-    <h2>From upload to perfect &mdash; every step handled.</h2>
-  </div>
-
-  <div class="kpi-container" id="kpi-container">
-
-    <!-- STEP 01 · UPLOAD -->
-    <div class="kpi-card active" data-index="0" id="step-upload">
-      <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" alt="Upload" class="kpi-bg" />
-      <div class="kpi-overlay"></div>
-      <div class="kpi-content">
-        <span class="kpi-vertical-label">Step 01 &middot; Upload</span>
-        <div class="kpi-icon-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
-        </div>
-        <div class="kpi-expanded-info">
-          <span class="kpi-badge">Step 01 &middot; Upload</span>
-          <div class="kpi-topic" style="font-size: 1.3rem;">Drop any file. We will take it from here.</div>
-          <p class="kpi-desc" style="margin-bottom: 1rem;">Upload a DOC, DOCX, or PDF and DocXpert instantly maps its structure, fonts, spacing, and layout &mdash; building a complete blueprint before you make a single change.</p>
-          <div class="dropzone" style="background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); color: #fff; padding: 0.8rem 1rem;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
-            <span style="color: rgba(255,255,255,0.85); font-size: 0.72rem;">drag a file or click to upload</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 02 · CONVERT -->
-    <div class="kpi-card" data-index="1" id="step-convert">
-      <img src="https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1200&q=80" alt="Convert" class="kpi-bg" />
-      <div class="kpi-overlay"></div>
-      <div class="kpi-content">
-        <span class="kpi-vertical-label">Step 02 &middot; Convert</span>
-        <div class="kpi-icon-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-        </div>
-        <div class="kpi-expanded-info">
-          <span class="kpi-badge">Step 02 &middot; Convert</span>
-          <div class="kpi-topic" style="font-size: 1.3rem;">Word to PDF. PDF to Word. Perfect fidelity.</div>
-          <p class="kpi-desc" style="margin-bottom: 1rem;">Convert in either direction without losing a single image, table, or paragraph style. DocXpert preserves what matters and delivers a file that looks exactly as intended.</p>
-          <div class="convert-row" style="background: rgba(255,255,255,0.1); padding: 0.6rem 0.8rem; border-radius: 12px; backdrop-filter: blur(8px);">
-            <div class="file-chip doc"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><small>report.docx</small></div>
-            <div class="arrow-mid"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-            <div class="file-chip pdf"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><small>report.pdf</small></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 03 · SPELLING -->
-    <div class="kpi-card" data-index="2" id="step-spelling">
-      <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80" alt="Spelling" class="kpi-bg" />
-      <div class="kpi-overlay"></div>
-      <div class="kpi-content">
-        <span class="kpi-vertical-label">Step 03 &middot; Spelling</span>
-        <div class="kpi-icon-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        </div>
-        <div class="kpi-expanded-info">
-          <span class="kpi-badge">Step 03 &middot; Spelling</span>
-          <div class="kpi-topic" style="font-size: 1.3rem;">AI that reads context, not just a dictionary.</div>
-          <p class="kpi-desc" style="margin-bottom: 0.8rem;">DocXpert scans your entire document and catches errors a basic spellchecker would miss &mdash; homophones, wrong-context words, domain terms &mdash; then lets you accept or reject each fix.</p>
-          <div class="suggest-chip" style="margin-top: 0;"><span class="old">recieve</span> &rarr; <span class="new">receive</span></div>
-          <div class="accept-row" style="margin-top: 8px;"><span class="pill yes">Accept</span><span class="pill no">Reject</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 04 · FONTS -->
-    <div class="kpi-card" data-index="3" id="step-fonts">
-      <img src="https://images.unsplash.com/photo-1542744094-3a3121699479?auto=format&fit=crop&w=1200&q=80" alt="Fonts" class="kpi-bg" />
-      <div class="kpi-overlay"></div>
-      <div class="kpi-content">
-        <span class="kpi-vertical-label">Step 04 &middot; Fonts</span>
-        <div class="kpi-icon-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-        </div>
-        <div class="kpi-expanded-info">
-          <span class="kpi-badge">Step 04 &middot; Fonts</span>
-          <div class="kpi-topic" style="font-size: 1.3rem;">One document, one voice, one font.</div>
-          <p class="kpi-desc" style="margin-bottom: 0.8rem;">Detects every rogue font and size lurking in your file &mdash; then unifies the whole document to a single, consistent standard with one click.</p>
-          <div class="font-compare">
-            <div class="font-tag bad">Times New Roman &middot; 14pt</div>
-            <div class="font-tag bad">Arial &middot; 11pt</div>
-            <div class="font-tag good">&#10003; Calibri &middot; 12pt &mdash; normalized</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 05 · REPLACE -->
-    <div class="kpi-card" data-index="4" id="step-replace">
-      <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80" alt="Replace" class="kpi-bg" />
-      <div class="kpi-overlay"></div>
-      <div class="kpi-content">
-        <span class="kpi-vertical-label">Step 05 &middot; Replace</span>
-        <div class="kpi-icon-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </div>
-        <div class="kpi-expanded-info">
-          <span class="kpi-badge">Step 05 &middot; Replace</span>
-          <div class="kpi-topic" style="font-size: 1.3rem;">Find anything. Replace everything at once.</div>
-          <p class="kpi-desc" style="margin-bottom: 0.8rem;">Swap a word, phrase, or formatting pattern across the entire document simultaneously &mdash; no manual hunting, no missed instances.</p>
-          <div class="search-bar" style="margin-bottom: 0;">find: <b>annual</b> &rarr; replace: <span class="to">yearly</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 06 · COMPARE -->
-    <div class="kpi-card" data-index="5" id="step-compare">
-      <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80" alt="Compare" class="kpi-bg" />
-      <div class="kpi-overlay"></div>
-      <div class="kpi-content">
-        <span class="kpi-vertical-label">Step 06 &middot; Compare</span>
-        <div class="kpi-icon-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-        </div>
-        <div class="kpi-expanded-info">
-          <span class="kpi-badge">Step 06 &middot; Compare</span>
-          <div class="kpi-topic" style="font-size: 1.3rem;">See exactly where two documents diverge.</div>
-          <p class="kpi-desc" style="margin-bottom: 0.8rem;">Upload a reference file and DocXpert overlays margins, spacing, and structure side-by-side &mdash; highlighting every discrepancy so nothing slips through.</p>
-          <div class="margin-diff" style="width: 140px; height: 120px;"><div class="page-b"></div><div class="page-a"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 07 · EXPORT -->
-    <div class="kpi-card" data-index="6" id="step-export">
-      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80" alt="Export" class="kpi-bg" />
-      <div class="kpi-overlay"></div>
-      <div class="kpi-content">
-        <span class="kpi-vertical-label">Step 07 &middot; Export</span>
-        <div class="kpi-icon-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        </div>
-        <div class="kpi-expanded-info">
-          <span class="kpi-badge">Step 07 &middot; Export</span>
-          <div class="kpi-topic" style="font-size: 1.3rem;">Review every change. Download with confidence.</div>
-          <p class="kpi-desc" style="margin-bottom: 1rem;">Before your final file is built, you review every AI suggestion &mdash; accept what fits, reject what does not. Your document, your call.</p>
-          <div class="download-row">
-            <div class="download-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-              Download final.docx
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-
-<!-- CLOSING CTA -->
-<div class="closing">
-  <h2>Stop fixing. Start finishing.</h2>
-  <p>DocXpert handles every document headache so you can spend your time on work that actually moves the needle.</p>
-  <div class="closing-actions">
-    <a href="#" class="btn-primary" id="closing-cta">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
-      Get started &mdash; it is free
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">Doc<span>Xpert</span></a>
+    <a href="#how" class="nav-cta" id="nav-upload-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" width="14" height="14">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <path d="M17 8l-5-5-5 5" />
+        <path d="M12 3v12" />
+      </svg>
+      Upload
     </a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="hero-inner">
+
+      <!-- CENTER HERO: Macbook Pro Display with embedded workspace app interface -->
+      <div class="hero-right" style="width: 100%; max-width: 1178px;">
+        <div class="macbook-sticky-container">
+          <svg width="650" height="400" viewBox="0 0 650 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Lid Frame -->
+            <path fill="#a4a5a7"
+              d="M79.56,13.18h491.32c7.23,0,13.1,5.87,13.1,13.1v336.61H66.46V26.28c0-7.23,5.87-13.1,13.1-13.1Z" />
+            <path fill="#222"
+              d="M79.96,14.24h490.45c6.83,0,12.37,5.54,12.37,12.37v336.28H67.59V26.6c0-6.83,5.54-12.37,12.37-12.37Z" />
+            <path fill="#000"
+              d="M570.25,15.74H80.34c-6.12,0-11.08,4.96-11.08,11.08v336.07h512.08V26.82c0-6.12-4.96-11.08-11.08-11.08ZM575.74,345.17H74.52V27.31c0-3.31,2.68-5.99,5.99-5.99h489.24c3.31,0,5.99,2.68,5.99,5.99v317.86Z" />
+
+            <rect fill="#1d1d1d" x="74.52" y="21.32" width="501.22" rx="5" ry="5" height="323.85" />
+
+            <!-- MACBOOK SCREEN INTERFACE CONTAINER -->
+            <foreignObject x="74.52" y="21.32" width="501.22" height="323.85" clip-path="url(#roundedCorners)">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="macbook-screen-app">
+                <div class="mac-window-bar">
+                  <div class="mac-dots">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                  </div>
+                </div>
+                <div class="mac-screen-body">
+                  <h1 class="mac-h1">Your documents,<br /><em>flawlessly polished</em><br />in seconds.</h1>
+                  <p class="mac-sub">Stop wrestling with messy Word files and broken PDFs. DocXpert reads, repairs, and
+                    perfects every document so you can focus on what actually matters.</p>
+                  <div class="mac-actions">
+                    <a href="#how" class="mac-btn-primary" id="hero-cta">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" width="7" height="7">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <path d="M17 8l-5-5-5 5" />
+                        <path d="M12 3v12" />
+                      </svg>
+                      Upload your first doc
+                    </a>
+                    <a href="#how" class="mac-btn-ghost" id="hero-how">
+                      See how it works &rarr;
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </foreignObject>
+
+            <!-- Macbook Base Hinge & Feet -->
+            <rect fill="#1d1d1d" x="69.09" y="350.51" width="512.11" height="12.48" />
+            <path fill="#000"
+              d="M298.14,21.02h54.07v6.5c0,1.56-1.27,2.82-2.82,2.82h-48.42c-1.56,0-2.82-1.27-2.82-2.82v-6.5h0Z" />
+            <path fill="#acadaf"
+              d="M19.04,362.77h611.92v10.39c0,5.95-4.83,10.79-10.79,10.79H29.83c-5.95,0-10.79-4.83-10.79-10.79v-10.39h0Z" />
+            <path fill="#080d4c" d="M325.11,25.14c-1.99.03-1.99-3.09,0-3.06,1.99-.03,1.99,3.09,0,3.06Z" />
+            <polygon fill="#b9b9bb" points="600.06 385.39 567.29 385.39 565.84 383.95 601.82 383.95 600.06 385.39" />
+            <polygon fill="#292929" points="598.73 386.82 568.64 386.82 567.32 385.39 600.35 385.39 598.73 386.82" />
+            <polygon fill="#b9b9bb" points="82.64 385.39 49.87 385.39 48.43 383.95 84.41 383.95 82.64 385.39" />
+            <polygon fill="#292929" points="81.31 386.82 51.23 386.82 49.9 385.39 82.93 385.39 81.31 386.82" />
+            <path fill="#8f9091"
+              d="M278.11,362.6h94.05c0,3.63-2.95,6.58-6.58,6.58h-80.89c-3.63,0-6.58-2.95-6.58-6.58h0Z" />
+            <defs>
+              <clipPath id="roundedCorners">
+                <rect fill="#ffffff" x="74.52" y="21.32" width="501.22" height="323.85" rx="5" ry="5" />
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FEATURES — INTEGRATION CARD GRID -->
+  <section class="features-section" id="how">
+    <div class="features-header">
+      <h2>Everything your documents need, in one place.</h2>
+      <p>DocXpert handles every step from upload to export — so you can stop wrestling with files and start shipping
+        polished work.</p>
+    </div>
+
+    <div class="features-grid">
+
+      <!-- Upload -->
+      <div class="feature-card" id="feat-upload">
+        <div class="feature-card-header">
+          <div class="feature-card-icon indigo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <path d="M17 8l-5-5-5 5" />
+              <path d="M12 3v12" />
+            </svg>
+          </div>
+          <button class="card-dots-btn" aria-label="More details" title="Click for details">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <circle cx="5" cy="12" r="2.2"/>
+              <circle cx="12" cy="12" r="2.2"/>
+              <circle cx="19" cy="12" r="2.2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="feature-card-body">
+          <h3>Smart Upload</h3>
+          <p>Drop any DOC, DOCX, or PDF and DocXpert instantly maps its structure, fonts, spacing, and layout — building
+            a complete blueprint before a single change.</p>
+          <div class="expanded-details">
+            <div class="expanded-details-content">
+              <strong>Deep Blueprint Parsing:</strong> Maps all paragraph styles, line heights, page breaks, embedded tables, and vector graphics with zero data loss.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Convert -->
+      <div class="feature-card" id="feat-convert">
+        <div class="feature-card-header">
+          <div class="feature-card-icon rust">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6" />
+            </svg>
+          </div>
+          <button class="card-dots-btn" aria-label="More details" title="Click for details">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <circle cx="5" cy="12" r="2.2"/>
+              <circle cx="12" cy="12" r="2.2"/>
+              <circle cx="19" cy="12" r="2.2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="feature-card-body">
+          <h3>Format Conversion</h3>
+          <p>Word to PDF, PDF to Word — convert in either direction without losing a single image, table, or paragraph
+            style. Perfect fidelity, every time.</p>
+          <div class="expanded-details">
+            <div class="expanded-details-content">
+              <strong>Dual Conversion Engine:</strong> Preserves exact layout dimensions, column widths, header/footer anchors, and inline media across formats.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spelling -->
+      <div class="feature-card" id="feat-spelling">
+        <div class="feature-card-header">
+          <div class="feature-card-icon indigo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <button class="card-dots-btn" aria-label="More details" title="Click for details">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <circle cx="5" cy="12" r="2.2"/>
+              <circle cx="12" cy="12" r="2.2"/>
+              <circle cx="19" cy="12" r="2.2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="feature-card-body">
+          <h3>AI Spell Check</h3>
+          <p>Catches errors a basic spellchecker would miss — homophones, wrong-context words, domain terms — then lets
+            you accept or reject each fix.</p>
+          <div class="expanded-details">
+            <div class="expanded-details-content">
+              <strong>Context-Aware LLM:</strong> Evaluates entire sentence grammar, technical terminology, brand style guides, and proper nouns in real-time.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fonts -->
+      <div class="feature-card" id="feat-fonts">
+        <div class="feature-card-header">
+          <div class="feature-card-icon gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polyline points="4 7 4 4 20 4 20 7" />
+              <line x1="9" y1="20" x2="15" y2="20" />
+              <line x1="12" y1="4" x2="12" y2="20" />
+            </svg>
+          </div>
+          <button class="card-dots-btn" aria-label="More details" title="Click for details">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <circle cx="5" cy="12" r="2.2"/>
+              <circle cx="12" cy="12" r="2.2"/>
+              <circle cx="19" cy="12" r="2.2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="feature-card-body">
+          <h3>Font Normalization</h3>
+          <p>Detects every rogue font and size lurking in your file, then unifies the whole document to a single,
+            consistent typographic standard with one click.</p>
+          <div class="expanded-details">
+            <div class="expanded-details-content">
+              <strong>Typographic Unification:</strong> Automatically resolves missing fonts, normalizes rogue font sizes, and harmonizes paragraph weights.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Replace -->
+      <div class="feature-card" id="feat-replace">
+        <div class="feature-card-header">
+          <div class="feature-card-icon teal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+          <button class="card-dots-btn" aria-label="More details" title="Click for details">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <circle cx="5" cy="12" r="2.2"/>
+              <circle cx="12" cy="12" r="2.2"/>
+              <circle cx="19" cy="12" r="2.2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="feature-card-body">
+          <h3>Find &amp; Replace</h3>
+          <p>Swap a word, phrase, or formatting pattern across the entire document simultaneously — no manual hunting,
+            no missed instances.</p>
+          <div class="expanded-details">
+            <div class="expanded-details-content">
+              <strong>Bulk RegEx Matching:</strong> Replaces terms, casing rules, or formatting styles across thousands of pages instantly.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compare -->
+      <div class="feature-card" id="feat-compare">
+        <div class="feature-card-header">
+          <div class="feature-card-icon rust">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <line x1="12" y1="3" x2="12" y2="21" />
+            </svg>
+          </div>
+          <button class="card-dots-btn" aria-label="More details" title="Click for details">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <circle cx="5" cy="12" r="2.2"/>
+              <circle cx="12" cy="12" r="2.2"/>
+              <circle cx="19" cy="12" r="2.2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="feature-card-body">
+          <h3>Document Compare</h3>
+          <p>Upload a reference file and DocXpert overlays margins, spacing, and structure side-by-side — highlighting
+            every discrepancy so nothing slips through.</p>
+          <div class="expanded-details">
+            <div class="expanded-details-content">
+              <strong>Visual Diff Engine:</strong> Side-by-side comparison highlights text additions, deletions, margin shifts, and line reflows.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export -->
+      <div class="feature-card" id="feat-export">
+        <div class="feature-card-header">
+          <div class="feature-card-icon indigo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </div>
+          <button class="card-dots-btn" aria-label="More details" title="Click for details">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <circle cx="5" cy="12" r="2.2"/>
+              <circle cx="12" cy="12" r="2.2"/>
+              <circle cx="19" cy="12" r="2.2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="feature-card-body">
+          <h3>Review &amp; Export</h3>
+          <p>Before your final file is built, review every AI suggestion — accept what fits, reject what doesn't. Your
+            document, your call, then download with confidence.</p>
+          <div class="expanded-details">
+            <div class="expanded-details-content">
+              <strong>Interactive Review Dashboard:</strong> Accept/reject AI suggestions item-by-item and export pristine DOCX or PDF files.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- CLOSING CTA -->
+  <div class="closing">
+    <h2>Stop fixing. Start finishing.</h2>
+    <p>DocXpert handles every document headache so you can spend your time on work that actually moves the needle.</p>
+    <div class="closing-actions">
+      <a href="#" class="btn-primary" id="closing-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" width="16" height="16">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <path d="M17 8l-5-5-5 5" />
+          <path d="M12 3v12" />
+        </svg>
+        Get started &mdash; it is free
+      </a>
+    </div>
   </div>
-</div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-brand">Doc<span>Xpert</span></div>
-  <p>&copy; 2025 DocXpert. All rights reserved.</p>
-</footer>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">Doc<span>Xpert</span></div>
+    <p>&copy; 2025 DocXpert. All rights reserved.</p>
+  </footer>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const kpiCards = document.querySelectorAll('.kpi-card');
-    const kpiContainer = document.getElementById('kpi-container');
-
-    if (!kpiContainer || !kpiCards.length) return;
-
-    function setActiveKpi(activeIndex) {
-      const isMobile = window.innerWidth <= 768;
-      const count = kpiCards.length;
-      
-      kpiCards.forEach((card, idx) => {
-        if (idx === activeIndex) {
-          card.classList.add('active');
-        } else {
-          card.classList.remove('active');
-        }
-      });
-
-      const template = Array.from({ length: count }, (_, idx) => 
-        idx === activeIndex ? '4fr' : '1fr'
-      ).join(' ');
-
-      if (isMobile) {
-        kpiContainer.style.gridTemplateRows = template;
-        kpiContainer.style.gridTemplateColumns = '1fr';
-      } else {
-        kpiContainer.style.gridTemplateColumns = template;
-        kpiContainer.style.gridTemplateRows = '1fr';
-      }
-    }
-
-    kpiCards.forEach((card, idx) => {
-      card.addEventListener('mouseenter', () => setActiveKpi(idx));
-      card.addEventListener('focus', () => setActiveKpi(idx));
-      card.addEventListener('click', () => setActiveKpi(idx));
-    });
-
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        const activeIdx = Array.from(kpiCards).findIndex(c => c.classList.contains('active'));
-        setActiveKpi(activeIdx >= 0 ? activeIdx : 0);
-      }, 50);
-    });
-
-    setActiveKpi(0);
-  });
-</script>
+  <script type="module" src="js/app.js"></script>
 </body>
+
 </html>

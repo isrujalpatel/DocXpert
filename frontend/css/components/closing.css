@@ -1,0 +1,38 @@
+/* ============================================================
+   closing.css — Closing CTA section
+   ============================================================ */
+
+.closing {
+  text-align: center;
+  padding: 4vh 6vw 12vh;
+}
+
+.closing h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3rem);
+  max-width: 20ch;
+  margin: 0 auto 1rem;
+  line-height: 1.1;
+}
+
+.closing h2 em {
+  font-style: italic;
+  color: var(--indigo);
+}
+
+.closing p {
+  color: var(--muted);
+  max-width: 40ch;
+  margin: 0 auto 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.closing-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}

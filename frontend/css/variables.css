@@ -1,0 +1,18 @@
+/* ============================================================
+   variables.css — Design tokens & CSS custom properties
+   DocXpert Design System
+   ============================================================ */
+
+:root {
+  --paper: #F5F2EA;
+  --ink: #17161C;
+  --indigo: #3B4CCA;
+  --indigo-soft: #6E7BE0;
+  --rust: #D8481E;
+  --rust-soft: #F0784E;
+  --line: #D8D3C4;
+  --muted: #7A7666;
+  --glass-bg: rgba(255, 255, 255, .52);
+  --glass-border: rgba(255, 255, 255, .7);
+  --shadow-card: 0 40px 80px -30px rgba(23, 22, 28, .3);
+}

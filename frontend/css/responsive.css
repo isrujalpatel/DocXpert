@@ -1,0 +1,92 @@
+/* ============================================================
+   responsive.css — Media queries & breakpoints
+   ============================================================ */
+
+/* Features grid — tablet */
+@media (max-width: 1024px) {
+  .feature-card {
+    flex: 0 0 calc(33.333% - 0.84rem);
+  }
+}
+
+/* Features grid — small tablet */
+@media (max-width: 768px) {
+  .feature-card {
+    flex: 0 0 calc(50% - 0.625rem);
+  }
+}
+
+/* General tablet / landscape mobile */
+@media (max-width: 760px) {
+  /* KPI stack cards go single column */
+  .card {
+    grid-template-columns: 1fr;
+    padding: 1.8rem;
+    gap: 1.6rem;
+  }
+
+  .card-right {
+    min-height: 200px;
+  }
+
+  .panel {
+    height: auto;
+    padding: 2rem 0;
+  }
+
+  .card {
+    position: relative !important;
+    top: 0 !important;
+  }
+
+  .stack {
+    padding-top: 0;
+  }
+
+  .stat-item {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stat-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Hide nav links */
+  nav .nav-links {
+    display: none;
+  }
+
+  /* Hero stacks vertically */
+  .hero-inner {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .hero-left {
+    align-items: center;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .sub {
+    text-align: center;
+  }
+
+  .scroll-hint {
+    align-items: center;
+  }
+}
+
+/* Features & feature cards — mobile */
+@media (max-width: 520px) {
+  .features-section {
+    padding: 4rem 1.25rem;
+  }
+
+  .feature-card {
+    flex: 0 0 100%;
+  }
+}
