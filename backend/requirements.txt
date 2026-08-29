@@ -1,0 +1,9 @@
+flask==3.1.1
+flask-cors==5.0.1
+python-docx==1.1.2
+PyMuPDF==1.25.5
+pdf2docx==0.5.8
+groq==0.25.0
+requests==2.32.3
+python-dotenv==1.1.0
+reportlab==4.4.0
